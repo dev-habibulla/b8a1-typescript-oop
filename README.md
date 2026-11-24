@@ -1,33 +1,25 @@
-# B8A1 — Problem Solving with TypeScript & OOP
+# B8A1 - Problem Solving with TypeScript & OOP
 
-Module 1–3 এর উপর ভিত্তি করে TypeScript problem solving assignment।
+This repo contains my solutions for the TypeScript and OOP assignment from Modules 1, 2, and 3.
 
-## What's inside
+## Files
 
-- `solutions.ts` — সব coding problem (1 থেকে 8)
-- `type-vs-interface.md` — type alias vs interface নিয়ে blog
-- `type-narrowing.md` — type narrowing নিয়ে blog
-
-## Problems covered
-
-1. Optional / default parameter (`multiplyValue`)
-2. Union type + typeof narrowing (`processInput`)
-3. Readonly tuple (`formatCoordinate`)
-4. Generics + rest params (`concatenateArrays`)
-5. Interface + filter (`getPopularCourses`)
-6. Generics with `keyof` (`pluckValues`)
-7. OOP — Employee / Manager
-8. Async Promise (`validateAgeAsync`)
+- `solutions.ts` - all coding problems in one file
+- `type-vs-interface.md` - blog on type aliases vs interfaces
+- `type-narrowing.md` - blog on type narrowing
 
 ## Blog posts
 
-- [Type Aliases vs Interface](./type-vs-interface.md)
+- [Type Aliases vs Interfaces](./type-vs-interface.md)
 - [Type Narrowing in TypeScript](./type-narrowing.md)
 
-## How to run
+## Topics covered
 
-```bash
-npx tsc solutions.ts --target ES2020 --module commonjs
-```
-
-অথবা ts-node দিয়ে check করা যায়।
+1. Default / optional parameters
+2. Union types and narrowing
+3. Readonly tuples
+4. Generics with rest parameters
+5. Interfaces and filtering
+6. Generics with `keyof`
+7. Classes and inheritance
+8. Async functions with Promises

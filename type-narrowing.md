@@ -1,63 +1,63 @@
-# Type Narrowing in TypeScript — কেন দরকার?
+# What is Type Narrowing in TypeScript?
 
-TypeScript এ একটা variable যখন multiple type হতে পারে (union), তখন compiler কে বোঝাতে হয় এই মুহূর্তে কোন type টা আসলে আছে। এই কাজটাকেই type narrowing বলে।
+Type narrowing is how TypeScript figures out a more specific type from a wider union. Without it, working with `string | number` feels painful because the compiler will not let you call methods that only exist on one side.
 
 ## Introduction
 
-ধরো একটা function `string | number` নেয়। ভিতরে যদি সরাসরি `.toUpperCase()` call করো, error দিবে — কারণ number এ সে method নেই। Narrowing দিয়ে আমরা প্রথমে check করি, তারপর safe ভাবে use করি।
+Imagine a function that accepts `string | number`. If you call `.toUpperCase()` right away, TypeScript throws an error. That makes sense — numbers do not have that method. Narrowing means you check the value first, then use it safely.
 
 ## Body
 
-সবচেয়ে common টা হলো `typeof`:
+The most common check is `typeof`:
 
 ```ts
-function printValue(input: string | number) {
+function show(input: string | number) {
   if (typeof input === "string") {
-    console.log(input.toUpperCase());
+    console.log(input.toLowerCase());
   } else {
-    console.log(input.toFixed(2));
+    console.log(input * 10);
   }
 }
 ```
 
-এখানে if এর ভিতরে TypeScript বুঝে যায় input string, else এ সেটা number।
+Inside the first branch, TypeScript knows `input` is a string. In the else branch it becomes a number.
 
-Class instance এর জন্য `instanceof` কাজে লাগে:
+For class instances, `instanceof` is the usual approach:
 
 ```ts
-class Car {
-  drive() {}
+class Dog {
+  bark() {}
 }
 
-class Bike {
-  pedal() {}
+class Cat {
+  meow() {}
 }
 
-function move(vehicle: Car | Bike) {
-  if (vehicle instanceof Car) {
-    vehicle.drive();
+function speak(pet: Dog | Cat) {
+  if (pet instanceof Dog) {
+    pet.bark();
   } else {
-    vehicle.pedal();
+    pet.meow();
   }
 }
 ```
 
-Object shape check করতে `in` operator helpful:
+When you are dealing with object shapes, the `in` operator helps:
 
 ```ts
-type Admin = { role: string; accessLevel: number };
-type Guest = { role: string; visitCount: number };
+type Admin = { name: string; level: number };
+type Guest = { name: string; visits: number };
 
-function check(user: Admin | Guest) {
-  if ("accessLevel" in user) {
-    return user.accessLevel;
+function info(user: Admin | Guest) {
+  if ("level" in user) {
+    return user.level;
   }
-  return user.visitCount;
+  return user.visits;
 }
 ```
 
-আমি assignment এর `processInput` এও typeof দিয়ে string, number, boolean আলাদা করেছি। Narrowing না থাকলে union type practically useless হয়ে যায় — কারণ TypeScript তোমাকে unsafe call করতে দেবে না।
+I used the same idea in `processInput` for this assignment. Once you check with `typeof`, each branch becomes type-safe. Unions are useful, but only if you narrow them properly.
 
 ## Conclusion
 
-Type narrowing মানে runtime check দিয়ে compile-time type কে ছোট করে আনা। `typeof`, `instanceof`, আর `in` — এই তিনটাই daily coding এ বারবার লাগে। Union লিখলেই narrowing শিখতে হবে, নাহলে type safety এর সুবিধা পুরোপুরি পাওয়া যায় না।
+Narrowing turns a broad union into a concrete type using runtime checks. `typeof`, `instanceof`, and `in` cover most day-to-day cases. Learn these early and union types become much easier to work with.

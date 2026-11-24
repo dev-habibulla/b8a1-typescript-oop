@@ -5,30 +5,31 @@ function multiplyValue(value: number, multiplier: number = 2): number {
 function processInput(value: string | number | boolean): string | number {
   if (typeof value === "string") {
     return value.trim().toLowerCase();
-  }
-
-  if (typeof value === "number") {
+  } else if (typeof value === "number") {
     return value * 10;
+  } else {
+    if (value === true) {
+      return "Active";
+    }
+    return "Inactive";
   }
-
-  return value ? "Active" : "Inactive";
 }
 
 function formatCoordinate(
-  coordinate: readonly [number, number, string]
+  point: readonly [number, number, string]
 ): string {
-  const [latitude, longitude, locationName] = coordinate;
-  return `Location: ${locationName} (${latitude}, ${longitude})`;
+  const lat = point[0];
+  const lng = point[1];
+  const name = point[2];
+  return "Location: " + name + " (" + lat + ", " + lng + ")";
 }
 
 function concatenateArrays<T>(...arrays: T[][]): T[] {
-  const result: T[] = [];
-
-  for (const arr of arrays) {
-    result.push(...arr);
+  let combined: T[] = [];
+  for (let i = 0; i < arrays.length; i++) {
+    combined = combined.concat(arrays[i]);
   }
-
-  return result;
+  return combined;
 }
 
 interface Course {
@@ -38,13 +39,21 @@ interface Course {
 }
 
 function getPopularCourses(courses: Course[], minStudents: number): Course[] {
-  return courses.filter(
-    (course) => course.isPublished && course.students >= minStudents
-  );
+  const popular: Course[] = [];
+  for (const course of courses) {
+    if (course.isPublished === true && course.students >= minStudents) {
+      popular.push(course);
+    }
+  }
+  return popular;
 }
 
 function pluckValues<T, K extends keyof T>(items: T[], key: K): T[K][] {
-  return items.map((item) => item[key]);
+  const values: T[K][] = [];
+  for (const item of items) {
+    values.push(item[key]);
+  }
+  return values;
 }
 
 class Employee {
@@ -57,7 +66,7 @@ class Employee {
   }
 
   getDetails(): string {
-    return `Employee: ${this.name}, Base Salary: ${this.baseSalary}`;
+    return "Employee: " + this.name + ", Base Salary: " + this.baseSalary;
   }
 }
 
@@ -70,19 +79,18 @@ class Manager extends Employee {
   }
 
   getRoleInfo(): string {
-    return `Manager of ${this.department}: ${this.name}`;
+    return "Manager of " + this.department + ": " + this.name;
   }
 }
 
 function validateAgeAsync(age: number): Promise<string> {
   return new Promise((resolve, reject) => {
-    if (age < 18) {
+    if (age >= 18) {
+      setTimeout(function () {
+        resolve("Access Granted");
+      }, 1000);
+    } else {
       reject(new Error("Access Denied: Must be 18 or older"));
-      return;
     }
-
-    setTimeout(() => {
-      resolve("Access Granted");
-    }, 1000);
   });
 }
